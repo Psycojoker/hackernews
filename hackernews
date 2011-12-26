@@ -36,12 +36,19 @@ hackernews()
     brown_highlight=""
   fi
 
-  attributes="title|link"
+  green_highlight=`echo "\033[0;32m"`
+  if [ "$green_highlight" == "\033[0;33m" ]
+  then
+    green_highlight=""
+  fi
+
+  attributes="title|link|comments"
   curl -s "http://news.ycombinator.com/rss" |
     grep -Eio "<item>.*</item>" |
     grep -Eio "<($attributes)>[^<>]*</($attributes)>" |
     sed -E "s/<title>([^<>]*)<\/title>/$brown_highlight\1/" |
-    sed -E "s/<link>([^<>]*)<\/link>/$blue_highlight\1★/" |
+    sed -E "s/<link>([^<>]*)<\/link>/$blue_highlight\1/" |
+    sed -E "s/<comments>([^<>]*)<\/comments>/$green_highlight\1★/" |
     tr "★" "\n"
 }
 
